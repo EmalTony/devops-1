@@ -22,3 +22,22 @@ git@github.com:sanjayguruji/registration-app-sanjaya.git
     9  yum repolist all
    10  rpm --import
 has context menu
+
+
+
+yum update all
+sudo yum install automake fuse fuse-devel gcc-c++ git libcurl-devel libxml2-devel make openssl-devel
+git clone
+https://github.com/s3fs-fuse/s3fs-fuse.git
+cd s3fs-fuse
+./autogen.sh
+./configure --prefix=/usr --with-openssl
+make
+sudo make install
+which s3fs
+touch /etc/passwd-s3fs
+vim /etc/passwd-s3fs
+sudo chmod 640 /etc/passwd-s3fs
+mkdir /mys3bucket
+s3fs your_bucketname -o use_cache=/tmp -o allow_other -o uid=1001 -o mp_umask=002 -o multireq_max=5 /mys3bucket
+df -Th
