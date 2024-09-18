@@ -1,0 +1,88 @@
+---
+
+- name: configure apache with handler
+
+  hosts: all
+
+  tasks:
+ 
+        - name: installed httpd
+
+          dnf:
+
+              name: httpd
+
+              state: latest
+
+        - name: copied httpd.conf file on target machine
+
+          copy:
+
+              src: httpd.conf
+
+              dest:  /etc/httpd/conf/httpd.conf
+
+        - name: copied index.html
+
+          copy:
+
+              src: index.html
+
+              dest:  /var/www/html/index.html
+
+        - name : restart the httpd service
+
+          systemd:
+
+              name: httpd
+
+              state: restarted
+
+              enabled: true
+
+          notify: restart_httpd
+
+        - name: installed firewalld
+
+          dnf:
+
+               name:  firewalld
+
+               state: present
+ 
+        - name: configure firewalld
+
+          firewalld:
+
+              service: http
+
+              permanent: yes            
+ 
+state: enabled
+
+              immediate: true
+
+        - name: allow port in firewall
+
+          firewalld:
+
+               port: 81/tcp
+
+               permanent: yes
+
+               state: enabled
+
+               immediate: true
+
+  handlers:
+
+    - name: restart_httpd
+
+      service:
+
+        name: httpd
+
+        state: restarted
+
+        enabled: yes
+ 
